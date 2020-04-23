@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <canvas id="display" width=800] height=800></canvas>
+    <script>
+    var target = document.getElementById('display');
+    var canDraw = false;
+
+    function drawAtPosition(canvas, ctx, event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        ctx.fillRect(x, y, 1, 1);
+    }
+
+    var ctx = target.getContext("2d");
+    ctx.fillStyle = "#FF0000";
+
+    var sock = new WebSocket("ws://127.0.0.1:5678/");
+    sock.onmessage = function (e) {
+        var imageData = ctx.createImageData(800, 800);
+        const to = new Uint32Array(imageData.data.buffer);
+        const from = JSON.parse(e.data);
+        for (let i = 0; i < from.length; i++) {
+
+            to[i] = from[i];
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    target.addEventListener('mousemove', function(e) {
+        if (canDraw)
+        {
+            drawAtPosition(target, ctx, e);
+        }
+    })
+    document.documentElement.addEventListener('mousedown', function(e) { canDraw = true; });
+    document.documentElement.addEventListener('mouseup', function(e) {
+         canDraw = false;
+         var toSend = Array.from(new Uint32Array(ctx.getImageData(0,0,800,800).data.buffer));
+         sock.send(JSON.stringify(toSend));
+    });
+
+    </script>
+</body>

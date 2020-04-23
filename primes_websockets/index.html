@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <canvas id="display" width=1000 height=1000></canvas>
+    <script>
+    var target = document.getElementById('display');
+    var ctx = target.getContext("2d");
+
+    var imageData = ctx.createImageData(1000, 1000);
+    const data = new Uint32Array(imageData.data.buffer);
+
+    var sock = new WebSocket("ws://127.0.0.1:5678/");
+    sock.onmessage = function (event) {
+        var data_r = JSON.parse(event.data)["data"]
+        for (let i = 0; i < data_r.length; i++) {
+            data[i] = data_r[i];
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+    </script>
+</body>

@@ -1,0 +1,1 @@
+rtl_fm -M wbfm -f89.7M | sox -traw -r32k -es -b16 -c1 -V1 - -togg - | socat -u - TCP-LISTEN:6789,fork
