@@ -13,7 +13,7 @@ def main():
     <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>ogg audio stream</title>
+        <title>mp3 audio stream</title>
     </head>
     <body>
         <audio controls>
@@ -24,8 +24,8 @@ def main():
     """
 
 @app.route('/radio.mp3')
-def stream_ogg():
-    def radio_ogg(sub, rdb):
+def stream_mp3():
+    def radio_mp3(sub, rdb):
         r = rdb
         start = time.time()
         print("start", file=sys.stdout)
@@ -42,6 +42,6 @@ def stream_ogg():
     if(sub.get_message() == None):
         pass
 
-    return Response(radio_ogg(sub, rdb), mimetype="audio/mpeg")
+    return Response(radio_mp3sub, rdb), mimetype="audio/mpeg")
 
 app.run(host='0.0.0.0')
