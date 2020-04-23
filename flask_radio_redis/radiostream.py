@@ -42,6 +42,6 @@ def stream_mp3():
     if(sub.get_message() == None):
         pass
 
-    return Response(radio_mp3sub, rdb), mimetype="audio/mpeg")
+    return Response(radio_mp3(sub, rdb), mimetype="audio/mpeg")
 
 app.run(host='0.0.0.0')
